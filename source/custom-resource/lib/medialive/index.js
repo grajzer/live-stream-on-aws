@@ -45,8 +45,7 @@ const createInput = async (config) => {
                 data = await medialive.createInput(params).promise();
                 responseData = {
                     Id: data.Input.Id,
-                    EndPoint1: data.Input.Destinations[0].Url,
-                    EndPoint2: data.Input.Destinations[1].Url
+                    EndPoint: data.Input.Destinations[0].Url
                 };
                 break;
 
@@ -64,10 +63,7 @@ const createInput = async (config) => {
                     Name: config.StreamName,
                     Type: config.Type,
                     Destinations: [{
-                            StreamName: config.StreamName + '/primary'
-                        },
-                        {
-                            StreamName: config.StreamName + '/secondary'
+                            StreamName: config.StreamName + '/stream'
                         }
                     ],
                     Tags: {'SolutionId': 'SO0109'}
@@ -76,8 +72,7 @@ const createInput = async (config) => {
                 data = await medialive.createInput(params).promise();
                 responseData = {
                     Id: data.Input.Id,
-                    EndPoint1: data.Input.Destinations[0].Url,
-                    EndPoint2: data.Input.Destinations[1].Url
+                    EndPoint: data.Input.Destinations[0].Url
                 };
                 break;
 
@@ -126,8 +121,7 @@ const createInput = async (config) => {
                 data = await medialive.createInput(params).promise();
                 responseData = {
                     Id: data.Input.Id,
-                    EndPoint1: 'Push InputType only',
-                    EndPoint2: 'Push InputType only'
+                    EndPoint: 'Push InputType only'
                 };
                 break;
 
@@ -151,8 +145,7 @@ const createInput = async (config) => {
                 data = await medialive.createInput(params).promise();
                 responseData = {
                     Id: data.Input.Id,
-                    EndPoint1: 'Push InputType only',
-                    EndPoint2: 'Push InputType only'
+                    EndPoint: 'Push InputType only'
                 };
                 break;
 
@@ -178,10 +171,12 @@ const createChannel = async (config) => {
     const encode1080p = require('./encoding-profiles/hd-1080p');
     const encode720p = require('./encoding-profiles/hd-720p');
     const encode540p = require('./encoding-profiles/sd-540p');
+
     let params,data,responseData;
     try {
         // Define baseline Paameters for cheate channel
         params = {
+            ChannelClass: 'SINGLE_PIPELINE',
             Destinations: [
                 {
                     Id: "destination1",
@@ -205,7 +200,9 @@ const createChannel = async (config) => {
             }],
             EncoderSettings: {},
             Tags: {
-              SolutionId:'SO0013'
+              SolutionId: 'SO0013',
+              Owner: config.Owner,
+              Name: config.Name.replace('-medialive', '')
             }
         };
 

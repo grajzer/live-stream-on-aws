@@ -59,14 +59,16 @@ const createEndPoint = async (config) => {
             ChannelId: config.ChannelId,
             Description: 'Live Streaming on AWS Solution',
             ManifestName: 'index',
-            StartoverWindowSeconds: 0,
+            StartoverWindowSeconds: parseInt(config.StartoverWindow),
             TimeDelaySeconds: 0,
             Authorization: {
                 CdnIdentifierSecret: config.CdnIdentifierSecret,
                 SecretsRoleArn: config.SecretsRoleArn
             },
             Tags: {
-                SolutionId: 'SO0013'
+                SolutionId: 'SO0013',
+                Owner: config.Owner,
+                Name: config.ChannelId.replace('-medialive', '')
             }
         };
         //Add configuration based on the endpoint type defined in config
@@ -132,7 +134,9 @@ const createChannel = async (config) => {
             Id: config.ChannelId,
             Description: 'Live Streaming on AWS Solution',
             Tags: {
-                SolutionId: 'SO0013'
+                SolutionId: 'SO0013',
+                Owner: config.Owner,
+                Name: config.ChannelId.replace('-medialive', '')
             }
         };
         let data = await mediapackage.createChannel(params).promise();
